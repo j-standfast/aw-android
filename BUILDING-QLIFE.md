@@ -24,14 +24,13 @@ v0.12.1, built from a clean clone. Tracked under
 ## Build
 
 ```sh
-git clone --recurse-submodules https://github.com/ActivityWatch/aw-android.git
+git clone --recurse-submodules -b qlife https://github.com/j-standfast/aw-android.git
 cd aw-android
 
-# Workaround: aw-android pins an aw-server-rust commit whose Cargo.lock has
-# time-0.3.30, which fails to compile on Rust 1.80+ (E0282 in time's parser).
-# Upstream aw-server-rust master fixed this in PR #589 (time → 0.3.47);
-# we replicate that bump locally without changing the submodule pin.
-( cd aw-server-rust && cargo update -p time )
+# The aw-server-rust submodule already points at j-standfast/aw-server-rust@qlife
+# which carries the time-0.3.30 → 0.3.44 Cargo.lock bump. Building from upstream
+# ActivityWatch/aw-android directly would hit `error[E0282]: type annotations
+# needed for Box<_>` in time's parser on Rust 1.80+; the fork sidesteps that.
 
 # Native libs (release mode, all 4 archs; ~5 min)
 ( cd aw-server-rust && \
