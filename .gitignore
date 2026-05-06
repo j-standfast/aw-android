@@ -75,3 +75,7 @@ fastlane/Preview.html
 fastlane/screenshots
 fastlane/test_output
 fastlane/readme.md
+
+# QLife fork — local build artifacts
+.build-cache/
+dist/
