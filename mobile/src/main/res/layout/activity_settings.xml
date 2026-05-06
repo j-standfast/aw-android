@@ -6,16 +6,16 @@
     android:padding="16dp">
 
     <com.google.android.material.switchmaterial.SwitchMaterial
-        android:id="@+id/switchNetworkAccess"
+        android:id="@+id/switchRemoteAccess"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/network_access_title"
+        android:text="@string/remote_access_title"
         android:padding="8dp" />
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/network_access_summary"
+        android:text="@string/remote_access_summary"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:paddingStart="8dp"
         android:paddingEnd="8dp"

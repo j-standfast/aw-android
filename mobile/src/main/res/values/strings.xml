@@ -29,10 +29,10 @@
 
     <!-- Settings -->
     <string name="settings_title">Settings</string>
-    <string name="network_access_title">Allow network access</string>
-    <string name="network_access_summary">Allow other devices on the local network to connect to the ActivityWatch server. When disabled, only this device can access the server.</string>
-    <string name="network_access_warning_title">Security warning</string>
-    <string name="network_access_warning_message">Enabling network access will allow any device on the same network to access your ActivityWatch data.\n\nThe ActivityWatch API does not have authentication, so anyone on your network will be able to read and modify your activity data.\n\nOnly enable this if you trust your network (e.g. a VPN like Tailscale).</string>
-    <string name="network_access_warning_enable">Enable</string>
-    <string name="network_access_restart_notice">Restart the app for this change to take effect.</string>
+    <string name="remote_access_title">Allow remote access (tailnet)</string>
+    <string name="remote_access_summary">Bind the ActivityWatch server on all interfaces so it is reachable over your tailnet (or other trusted network). When disabled, only this device can access the server.</string>
+    <string name="remote_access_warning_title">Security warning</string>
+    <string name="remote_access_warning_message">Enabling remote access will bind the ActivityWatch server to all network interfaces, making it reachable from anything that can route to this device.\n\nThe ActivityWatch API has no authentication, so anyone who can reach the port will be able to read and modify your activity data.\n\nOnly enable this on a trusted network you control end-to-end (e.g. a tailnet). Do not enable on public Wi-Fi.</string>
+    <string name="remote_access_warning_enable">Enable</string>
+    <string name="remote_access_restart_notice">Restart the app for this change to take effect.</string>
 </resources>

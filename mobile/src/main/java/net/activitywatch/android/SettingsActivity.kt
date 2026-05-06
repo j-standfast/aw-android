@@ -16,35 +16,35 @@ class SettingsActivity : AppCompatActivity() {
         supportActionBar?.title = getString(R.string.settings_title)
 
         val prefs = AWPreferences(this)
-        val switchNetworkAccess = findViewById<SwitchMaterial>(R.id.switchNetworkAccess)
-        switchNetworkAccess.isChecked = prefs.isNetworkAccessEnabled()
+        val switchRemoteAccess = findViewById<SwitchMaterial>(R.id.switchRemoteAccess)
+        switchRemoteAccess.isChecked = prefs.isRemoteAccessEnabled()
 
-        switchNetworkAccess.setOnCheckedChangeListener { _, isChecked ->
+        switchRemoteAccess.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
                 // Show security warning before enabling
                 AlertDialog.Builder(this)
-                    .setTitle(R.string.network_access_warning_title)
-                    .setMessage(R.string.network_access_warning_message)
-                    .setPositiveButton(R.string.network_access_warning_enable) { _, _ ->
-                        prefs.setNetworkAccessEnabled(true)
+                    .setTitle(R.string.remote_access_warning_title)
+                    .setMessage(R.string.remote_access_warning_message)
+                    .setPositiveButton(R.string.remote_access_warning_enable) { _, _ ->
+                        prefs.setRemoteAccessEnabled(true)
                         showRestartNotice()
                     }
                     .setNegativeButton(android.R.string.cancel) { _, _ ->
-                        switchNetworkAccess.isChecked = false
+                        switchRemoteAccess.isChecked = false
                     }
                     .setOnCancelListener {
-                        switchNetworkAccess.isChecked = false
+                        switchRemoteAccess.isChecked = false
                     }
                     .show()
             } else {
-                prefs.setNetworkAccessEnabled(false)
+                prefs.setRemoteAccessEnabled(false)
                 showRestartNotice()
             }
         }
     }
 
     private fun showRestartNotice() {
-        Toast.makeText(this, R.string.network_access_restart_notice, Toast.LENGTH_LONG).show()
+        Toast.makeText(this, R.string.remote_access_restart_notice, Toast.LENGTH_LONG).show()
     }
 
     override fun onSupportNavigateUp(): Boolean {

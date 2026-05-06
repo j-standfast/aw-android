@@ -57,7 +57,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         binding.navView.setNavigationItemSelectedListener(this)
 
         val ri = RustInterface(this)
-        val host = if (prefs.isNetworkAccessEnabled()) "0.0.0.0" else "127.0.0.1"
+        val host = if (prefs.isRemoteAccessEnabled()) "0.0.0.0" else "127.0.0.1"
         ri.startServerTask(this, host)
 
         if (savedInstanceState != null) {

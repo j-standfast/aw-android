@@ -27,16 +27,16 @@ class AWPreferences(context: Context) {
         editor.apply()
     }
 
-    // Whether the server should bind to all network interfaces (0.0.0.0)
-    // instead of localhost only (127.0.0.1).
+    // Whether the server should bind to all interfaces (0.0.0.0) so it is
+    // reachable over the device's tailnet, instead of loopback only.
     // Off by default for security.
-    fun isNetworkAccessEnabled(): Boolean {
-        return sharedPreferences.getBoolean("networkAccessEnabled", false)
+    fun isRemoteAccessEnabled(): Boolean {
+        return sharedPreferences.getBoolean("remoteAccessEnabled", false)
     }
 
-    fun setNetworkAccessEnabled(enabled: Boolean) {
+    fun setRemoteAccessEnabled(enabled: Boolean) {
         val editor = sharedPreferences.edit()
-        editor.putBoolean("networkAccessEnabled", enabled)
+        editor.putBoolean("remoteAccessEnabled", enabled)
         editor.apply()
     }
 }
