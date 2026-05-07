@@ -6,7 +6,9 @@ import android.os.Bundle
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.navigation.NavigationView
 import androidx.core.view.GravityCompat
+import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import android.view.Menu
 import android.view.MenuItem
 import androidx.fragment.app.Fragment
@@ -49,6 +51,19 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         binding = ActivityMainBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
+
+        // Wire the Toolbar as the activity's action bar, plus a hamburger toggle
+        // to open the navigation drawer. Without this, gesture-nav devices (Android
+        // 11+, GrapheneOS) intercept the left-edge swipe as a system back gesture
+        // and leave the drawer unreachable.
+        val toolbar = findViewById<Toolbar>(R.id.toolbar)
+        setSupportActionBar(toolbar)
+        val toggle = ActionBarDrawerToggle(
+            this, binding.drawerLayout, toolbar,
+            R.string.navigation_drawer_open, R.string.navigation_drawer_close
+        )
+        binding.drawerLayout.addDrawerListener(toggle)
+        toggle.syncState()
 
         // Set up alarm to send heartbeats
         val usw = UsageStatsWatcher(this)
