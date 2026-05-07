@@ -123,6 +123,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 url = "$baseURL/#/buckets/"
             }
             R.id.nav_settings -> {
+                startActivity(Intent(this, SettingsActivity::class.java))
+                binding.drawerLayout.closeDrawer(GravityCompat.START)
+                return true
+            }
+            R.id.nav_server_settings -> {
                 fragmentClass = WebUIFragment::class.java
                 url = "$baseURL/#/settings/"
             }
