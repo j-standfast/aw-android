@@ -55,7 +55,7 @@ Output: `mobile/build/outputs/apk/release/mobile-release-unsigned.apk` (~106 MB)
 ## Sign
 
 ```sh
-source <(grep AW_ANDROID_ ~/r/qlife/code/main/packages/server/.env)
+source <(grep AW_ANDROID_ ~/r/qlife/code/trunk/packages/server/.env)
 mkdir -p dist
 
 ~/Android/Sdk/build-tools/34.0.0/zipalign -p 4 \
