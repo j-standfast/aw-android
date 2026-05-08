@@ -57,10 +57,30 @@ android {
     //    }
     //}
 
-    // Creates a resource versionName with the full version
-    // https://stackoverflow.com/a/36468650/965332
+    // Creates a resource versionName with the full version, including the
+    // QLife fork tag suffix derived from `git describe`. Examples:
+    //   on tag v0.12.1-qlife.4 (clean):     v0.12.1-qlife.4
+    //   3 commits past tag (clean):         v0.12.1-qlife.4-3-gabc1234
+    //   3 commits past tag (dirty):         v0.12.1-qlife.4-3-gabc1234-dirty
+    //   no matching tag (e.g. shallow CI):  v0.12.1-qlife.dev
+    // Falls back gracefully when git is unavailable or no qlife tag exists.
     applicationVariants.all { variant ->
-        variant.resValue "string", "versionName", 'v' + variant.versionName
+        def qlifeVersion
+        try {
+            def stdout = new ByteArrayOutputStream()
+            def result = project.exec {
+                commandLine 'git', 'describe', '--tags', '--match', 'v*-qlife.*', '--dirty=-dirty'
+                standardOutput = stdout
+                errorOutput = new ByteArrayOutputStream()
+                ignoreExitValue = true
+            }
+            qlifeVersion = result.exitValue == 0
+                ? stdout.toString().trim()
+                : 'v' + variant.versionName + '-qlife.dev'
+        } catch (Exception ignored) {
+            qlifeVersion = 'v' + variant.versionName + '-qlife.dev'
+        }
+        variant.resValue "string", "versionName", qlifeVersion
     }
 
     buildFeatures {
