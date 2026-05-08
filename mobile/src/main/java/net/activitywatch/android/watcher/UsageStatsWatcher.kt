@@ -30,6 +30,11 @@ import java.text.SimpleDateFormat
 
 const val bucket_id = "aw-watcher-android-test"
 const val unlock_bucket_id = "aw-watcher-android-unlock"
+const val lock_bucket_id = "aw-watcher-android-lock"
+const val screen_on_bucket_id = "aw-watcher-android-screen-on"
+const val screen_off_bucket_id = "aw-watcher-android-screen-off"
+const val device_shutdown_bucket_id = "aw-watcher-android-device-shutdown"
+const val device_startup_bucket_id = "aw-watcher-android-device-startup"
 
 class UsageStatsWatcher constructor(val context: Context) {
     private val ri = RustInterface(context)
@@ -182,6 +187,11 @@ class UsageStatsWatcher constructor(val context: Context) {
             // TODO: Use other bucket type when support for such a type has been implemented in aw-webui
             ri.createBucketHelper(bucket_id, "currentwindow")
             ri.createBucketHelper(unlock_bucket_id, "os.lockscreen.unlocks")
+            ri.createBucketHelper(lock_bucket_id, "os.lockscreen.locks")
+            ri.createBucketHelper(screen_on_bucket_id, "os.screen.interactive")
+            ri.createBucketHelper(screen_off_bucket_id, "os.screen.non_interactive")
+            ri.createBucketHelper(device_shutdown_bucket_id, "os.device.shutdown")
+            ri.createBucketHelper(device_startup_bucket_id, "os.device.startup")
             lastUpdated = getLastEventTime()
             Log.w(TAG, "lastUpdated: ${lastUpdated?.toString() ?: "never"}")
 
@@ -198,17 +208,27 @@ class UsageStatsWatcher constructor(val context: Context) {
                 val event = UsageEvents.Event()
                 usageEvents.getNextEvent(event)
 
-                // Log screen unlock
+                // Log screen / keyguard / device-power transitions.
+                // NOTE: getLastEventTime() reads the last activity-bucket event, so events in
+                // these device-scoped buckets after that timestamp may get re-sent across polls.
+                // Identical heartbeats are merged downstream, so this is benign.
                 if(event.eventType !in arrayListOf(UsageEvents.Event.ACTIVITY_RESUMED, UsageEvents.Event.ACTIVITY_PAUSED)) {
-                    if(event.eventType == UsageEvents.Event.KEYGUARD_HIDDEN){
-                        val timestamp = DateTimeUtils.toInstant(java.util.Date(event.timeStamp))
-                        // NOTE: getLastEventTime() returns the last time of an event from  the activity bucket(bucket_id)
-                        // Therefore, if an unlock happens after last event from main bucket, unlock event will get sent twice.
-                        // Fortunately not an issue because identical events will get merged together (see heartbeats)
-                        ri.heartbeatHelper(unlock_bucket_id, timestamp, 0.0, JSONObject(), 0.0)
+                    val timestamp = DateTimeUtils.toInstant(java.util.Date(event.timeStamp))
+                    when(event.eventType) {
+                        UsageEvents.Event.KEYGUARD_HIDDEN ->
+                            ri.heartbeatHelper(unlock_bucket_id, timestamp, 0.0, JSONObject(), 0.0)
+                        UsageEvents.Event.KEYGUARD_SHOWN ->
+                            ri.heartbeatHelper(lock_bucket_id, timestamp, 0.0, JSONObject(), 0.0)
+                        UsageEvents.Event.SCREEN_INTERACTIVE ->
+                            ri.heartbeatHelper(screen_on_bucket_id, timestamp, 0.0, JSONObject(), 0.0)
+                        UsageEvents.Event.SCREEN_NON_INTERACTIVE ->
+                            ri.heartbeatHelper(screen_off_bucket_id, timestamp, 0.0, JSONObject(), 0.0)
+                        UsageEvents.Event.DEVICE_SHUTDOWN ->
+                            ri.heartbeatHelper(device_shutdown_bucket_id, timestamp, 0.0, JSONObject(), 0.0)
+                        UsageEvents.Event.DEVICE_STARTUP ->
+                            ri.heartbeatHelper(device_startup_bucket_id, timestamp, 0.0, JSONObject(), 0.0)
+                        // everything else (USER_INTERACTION, NOTIFICATION_*, CONFIGURATION_CHANGE, etc.) — drop
                     }
-                    // Not sure which events are triggered here, so we use a (probably safe) fallback
-                    //Log.d(TAG, "Rare eventType: ${event.eventType}, skipping")
                     continue@nextEvent
                 }
 
