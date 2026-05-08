@@ -157,8 +157,14 @@ class ChromeWatcher : AccessibilityService() {
         val data = JSONObject()
         data.put("url", url)
         data.put("title", title)
-        data.put("audible", false) // TODO
-        data.put("incognito", false) // TODO
+        // `audible` and `incognito` are always false — preserved from upstream
+        // for schema parity with desktop aw-watcher-web. Real detection from an
+        // AccessibilityService would require probing accessibility-tree markers
+        // (incognito icon resource ID, "Incognito" in window content-description)
+        // per browser. Skipped for now; downstream consumers should treat both
+        // fields as unreliable.
+        data.put("audible", false)
+        data.put("incognito", false)
 
         ri?.heartbeatHelper(browser.bucketId, start, duration.seconds.toDouble(), data, 1.0)
     }
