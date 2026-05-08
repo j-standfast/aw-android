@@ -21,4 +21,21 @@
         android:paddingEnd="8dp"
         android:textColor="?android:attr/textColorSecondary" />
 
+    <com.google.android.material.switchmaterial.SwitchMaterial
+        android:id="@+id/switchStartOnBoot"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/start_on_boot_title"
+        android:layout_marginTop="16dp"
+        android:padding="8dp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/start_on_boot_summary"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp"
+        android:textColor="?android:attr/textColorSecondary" />
+
 </LinearLayout>

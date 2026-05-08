@@ -9,6 +9,7 @@ import androidx.core.view.GravityCompat
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.core.content.ContextCompat
 import android.view.Menu
 import android.view.MenuItem
 import androidx.fragment.app.Fragment
@@ -71,9 +72,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         binding.navView.setNavigationItemSelectedListener(this)
 
-        val ri = RustInterface(this)
-        val host = if (prefs.isRemoteAccessEnabled()) "0.0.0.0" else "127.0.0.1"
-        ri.startServerTask(this, host)
+        ContextCompat.startForegroundService(
+            this,
+            Intent(this, AWServerService::class.java),
+        )
 
         if (savedInstanceState != null) {
             return

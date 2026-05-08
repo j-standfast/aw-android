@@ -35,4 +35,10 @@
     <string name="remote_access_warning_message">Enabling remote access will bind the ActivityWatch server to all network interfaces, making it reachable from anything that can route to this device.\n\nThe ActivityWatch API has no authentication, so anyone who can reach the port will be able to read and modify your activity data.\n\nOnly enable this on a trusted network you control end-to-end (e.g. a tailnet). Do not enable on public Wi-Fi.</string>
     <string name="remote_access_warning_enable">Enable</string>
     <string name="remote_access_restart_notice">Restart the app for this change to take effect.</string>
+    <string name="start_on_boot_title">Start on boot</string>
+    <string name="start_on_boot_summary">Bring the ActivityWatch server up automatically when the device finishes booting and is unlocked. Disable if you prefer to open the app manually.</string>
+    <string name="aw_server_notification_channel_name">ActivityWatch server</string>
+    <string name="aw_server_notification_channel_description">Persistent notification shown while the local ActivityWatch server is running.</string>
+    <string name="aw_server_notification_title">ActivityWatch</string>
+    <string name="aw_server_notification_text">Server running on port 5600.</string>
 </resources>

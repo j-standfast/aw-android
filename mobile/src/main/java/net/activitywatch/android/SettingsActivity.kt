@@ -41,6 +41,12 @@ class SettingsActivity : AppCompatActivity() {
                 showRestartNotice()
             }
         }
+
+        val switchStartOnBoot = findViewById<SwitchMaterial>(R.id.switchStartOnBoot)
+        switchStartOnBoot.isChecked = prefs.isStartOnBootEnabled()
+        switchStartOnBoot.setOnCheckedChangeListener { _, isChecked ->
+            prefs.setStartOnBootEnabled(isChecked)
+        }
     }
 
     private fun showRestartNotice() {

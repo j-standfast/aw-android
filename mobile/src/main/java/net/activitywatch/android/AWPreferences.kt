@@ -39,4 +39,17 @@ class AWPreferences(context: Context) {
         editor.putBoolean("remoteAccessEnabled", enabled)
         editor.apply()
     }
+
+    // Whether the server should be brought up automatically on BOOT_COMPLETED.
+    // On by default — the obvious user expectation post-fork is autonomous
+    // operation, but still toggleable for users who prefer manual control.
+    fun isStartOnBootEnabled(): Boolean {
+        return sharedPreferences.getBoolean("startOnBootEnabled", true)
+    }
+
+    fun setStartOnBootEnabled(enabled: Boolean) {
+        val editor = sharedPreferences.edit()
+        editor.putBoolean("startOnBootEnabled", enabled)
+        editor.apply()
+    }
 }
