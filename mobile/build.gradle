@@ -16,7 +16,7 @@ android {
         versionName "0.12.1"
 
         // Set in CI by `bundle exec fastlane update_version`
-        versionCode 37
+        versionCode 38
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         // NOTE: This only works for API level 28 and above
