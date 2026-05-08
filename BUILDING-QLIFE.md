@@ -79,10 +79,28 @@ default PKCS12 keystore format does not support distinct passwords.
 
 ## Release
 
-1. Bump the suffix (`qlife.N`) for each release tag.
-2. `git tag -s v0.12.1-qlife.N` on the QLife fork remote.
-3. `gh release create v0.12.1-qlife.N dist/aw-android-qlife-v0.12.1-qlife.N.apk`.
-4. Obtainium on the phone tracks `j-standfast/aw-android` releases.
+1. **Bump `versionCode`** in `mobile/build.gradle` (monotonically — Android refuses upgrade installs at the same value, so Obtainium auto-upgrades require a strictly higher value than the build already on the phone). Commit, push, merge.
+2. Bump the suffix (`qlife.N`) for each release tag — the suffix is encoded in the tag, not in `versionName` (which stays at `0.12.1`).
+3. Rebuild + sign per the **Build** and **Sign** sections above, against the merge commit at the new versionCode.
+4. `git tag v0.12.1-qlife.N <merge-sha> -m "..."` on the QLife fork remote, then `git push qlife v0.12.1-qlife.N`.
+5. `gh release create v0.12.1-qlife.N dist/aw-android-qlife-v0.12.1-qlife.N.apk --title "..." --notes "..."`.
+6. Obtainium on the phone picks up the new release on its next poll (see **Phone-side setup** below).
+
+## Phone-side setup (Obtainium)
+
+One-time configuration so the Pixel auto-tracks fork releases instead of upstream `ActivityWatch/aw-android`.
+
+In Obtainium → Add app:
+
+- **Source URL**: `https://github.com/j-standfast/aw-android`
+- **Source type**: GitHub (auto-detected from URL).
+- **Track**: GitHub releases (not commits, not source).
+- **APK filter / regex**: `aw-android-qlife-.*\.apk` — matches the signed assets named `aw-android-qlife-v0.12.1-qlife.N.apk`. Without a filter, Obtainium may pick up CI-built unsigned APKs if any are ever attached to a release.
+- **Pre-release**: leave off unless you specifically want pre-release builds.
+
+After adding, Obtainium should detect the latest release and offer to install. The first install over a previously-sideloaded build is an in-place upgrade (signing-key continuity from QLI-554 → no uninstall, no data loss). Subsequent releases install automatically on the next Obtainium poll, provided each new release has a higher versionCode than the previous.
+
+If Obtainium can't see the release: check the APK filter, then check that the signed APK is actually attached to the GitHub release (not just listed in the release notes).
 
 ## First-time keystore generation
 
