@@ -41,4 +41,5 @@
     <string name="aw_server_notification_channel_description">Persistent notification shown while the local ActivityWatch server is running.</string>
     <string name="aw_server_notification_title">ActivityWatch</string>
     <string name="aw_server_notification_text">Server running on port 5600.</string>
+    <string name="aw_server_notification_stop">Stop</string>
 </resources>

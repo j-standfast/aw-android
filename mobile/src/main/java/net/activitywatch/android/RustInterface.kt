@@ -41,6 +41,7 @@ class RustInterface constructor(context: Context? = null) {
     private external fun initialize(): String
     private external fun greeting(pattern: String): String
     private external fun startServer(host: String)
+    private external fun stopServer()
     private external fun setDataDir(path: String)
     external fun getBuckets(): String
     external fun createBucket(bucket: String): String
@@ -80,6 +81,15 @@ class RustInterface constructor(context: Context? = null) {
             }
             Log.w(TAG, "Server started on $host")
         }
+    }
+
+    fun stopServerTask() {
+        // Idempotent: the JNI handler logs and returns if no shutdown handle is
+        // stashed (e.g. server never started, or already stopped). The executor
+        // thread in startServerTask completes naturally once rocket exits and
+        // posts serverStarted = false back to the main thread.
+        Log.w(TAG, "Stopping server...")
+        stopServer()
     }
 
     fun createBucketHelper(bucket_id: String, type: String, hostname: String = "unknown", client: String = "aw-android") {
