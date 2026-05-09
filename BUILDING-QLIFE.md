@@ -102,6 +102,18 @@ After adding, Obtainium should detect the latest release and offer to install. T
 
 If Obtainium can't see the release: check the APK filter, then check that the signed APK is actually attached to the GitHub release (not just listed in the release notes).
 
+## Upgrade-time accessibility re-grant (one-time, v0.12.1-qlife.8+)
+
+The browser-URL watcher class was renamed `ChromeWatcher` → `BrowserWatcher` in QLI-621 (release v0.12.1-qlife.8). Android binds AccessibilityService permission grants to the ComponentName (`package + class`), so the rename produces a "new" service from Android's point of view and the existing grant silently does not transfer. Until you re-enable it once, layer-3 (URL/title) capture is dead — buckets `aw-watcher-android-web-vanadium` and `aw-watcher-android-web-chrome` stop receiving events.
+
+After upgrading to qlife.8 or later from any earlier qlife.N:
+
+1. Open the ActivityWatch app once (this also kicks the foreground-service start path for the rust server).
+2. Settings → Accessibility → Installed apps → **ActivityWatch** (the BrowserWatcher service). Toggle on.
+3. Confirm by browsing in Vanadium for a few seconds, then `curl http://pixel-10-pro-xl:5600/api/0/buckets/aw-watcher-android-web-vanadium/events?limit=1` — the latest URL should match what's on screen.
+
+There is no API to migrate the grant programmatically. This is a one-time tax for the rename and won't recur unless we rename the service again.
+
 ## First-time keystore generation
 
 Done once; back the resulting `.jks` up alongside other QLife secrets.

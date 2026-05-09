@@ -72,7 +72,7 @@
             android:exported="false"
             android:foregroundServiceType="dataSync"/>
 
-        <service android:name=".watcher.ChromeWatcher"
+        <service android:name=".watcher.BrowserWatcher"
             android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE"
             android:exported="true">
             <intent-filter>

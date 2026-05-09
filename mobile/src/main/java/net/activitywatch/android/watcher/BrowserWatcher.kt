@@ -9,15 +9,18 @@ import org.json.JSONObject
 import org.threeten.bp.Duration
 import org.threeten.bp.Instant
 
-// NOTE: Class name is `ChromeWatcher` for historical reasons — it is the
-// AccessibilityService ComponentName that on-device permission grants are tied
-// to. Renaming to BrowserWatcher forces every user to re-grant the
-// accessibility permission. See QLI-621 for the rename + permission-migration
-// follow-up. The class is now a generic multi-browser URL watcher; the table
-// below is the source of truth for which apps are tracked.
-class ChromeWatcher : AccessibilityService() {
+// Multi-browser URL watcher. The `browsers` table below is the source of
+// truth for which apps are tracked; each entry produces its own
+// `aw-watcher-android-web-<bucketSuffix>` bucket on aw-server-rust.
+//
+// Renamed from `ChromeWatcher` in QLI-621. The rename produces a new
+// AccessibilityService ComponentName, which Android treats as a different
+// service for permission purposes, so users upgrading from any pre-rename
+// build must re-enable this service under Settings → Accessibility once
+// after install. There is no Android API to migrate the grant.
+class BrowserWatcher : AccessibilityService() {
 
-    private val TAG = "ChromeWatcher"
+    private val TAG = "BrowserWatcher"
 
     /**
      * Per-browser configuration. Each entry produces its own
